@@ -57,6 +57,64 @@ section h3 {
   color: #1a237e;
 }
 
+/* Toolbar styles */
+#toolbar {
+  margin-bottom: 20px;
+  padding: 15px;
+  background-color: #f0f0f0;
+  border-radius: 5px;
+  border: 1px solid #ddd;
+}
+
+.toolbar-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+  align-items: flex-end;
+}
+
+.toolbar-item {
+  flex: 1;
+  min-width: 200px;
+  display: flex;
+  flex-direction: column;
+}
+
+.toolbar-item label {
+  font-weight: bold;
+  margin-bottom: 5px;
+  font-size: 14px;
+  color: #333;
+}
+
+.toolbar-item input,
+.toolbar-item select {
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 14px;
+  background-color: white;
+}
+
+.toolbar-item input:focus,
+.toolbar-item select:focus {
+  outline: none;
+  border-color: #1a237e;
+  box-shadow: 0 0 0 2px rgba(26, 35, 126, 0.1);
+}
+
+/* Mobile responsive adjustments for toolbar */
+@media (max-width: 768px) {
+  .toolbar-row {
+    flex-direction: column;
+  }
+  
+  .toolbar-item {
+    width: 100%;
+    min-width: 100%;
+  }
+}
+
 .activity-card {
   margin-bottom: 15px;
   padding: 15px;
@@ -72,6 +130,11 @@ section h3 {
 
 .activity-card p {
   margin-bottom: 8px;
+}
+
+.activity-category {
+  color: #666;
+  font-size: 14px;
 }
 
 /* New styles for participants section */
