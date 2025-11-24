@@ -202,6 +202,46 @@ footer {
   color: #666;
 }
 
+/* Mascots section styles */
+#mascots-section {
+  background-color: #f0fff0;
+  padding: 20px;
+  border-radius: 5px;
+  margin-bottom: 30px;
+  text-align: center;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+#mascots-section h3 {
+  color: #32cd32;
+  margin-bottom: 20px;
+}
+
+.mascots-grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 20px;
+  align-items: center;
+}
+
+.mascot-item {
+  text-align: center;
+}
+
+.mascot-item img {
+  width: 120px;
+  height: 120px;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.mascot-item p {
+  margin-top: 5px;
+  font-size: 12px;
+  color: #666;
+}
+
 /* Animated Git-style branch lines background */
 .git-branches {
   position: fixed;
