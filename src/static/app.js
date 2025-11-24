@@ -88,13 +88,17 @@ document.addEventListener("DOMContentLoaded", () => {
     const password = document.getElementById("password").value;
     
     try {
-      const response = await fetch(
-        `/auth/login?username=${encodeURIComponent(username)}&password=${encodeURIComponent(password)}`,
-        {
-          method: "POST",
-          credentials: "include"
-        }
-      );
+      const response = await fetch("/auth/login", {
+        method: "POST",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          username: username,
+          password: password
+        })
+      });
       
       const result = await response.json();
       

@@ -1,4 +1,5 @@
 {
+  "_comment": "WARNING: In production, passwords should be hashed using bcrypt or similar. Plain text passwords are for demo purposes only.",
   "teachers": [
     {
       "username": "teacher1",

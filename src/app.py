@@ -5,7 +5,7 @@ A super simple FastAPI application that allows students to view and sign up
 for extracurricular activities at Mergington High School.
 """
 
-from fastapi import FastAPI, HTTPException, Cookie, Response
+from fastapi import FastAPI, HTTPException, Cookie, Response, Body
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import RedirectResponse
 import os
@@ -13,6 +13,7 @@ from pathlib import Path
 import json
 import secrets
 from typing import Optional
+from pydantic import BaseModel
 
 app = FastAPI(title="Mergington High School API",
               description="API for viewing and signing up for extracurricular activities")
@@ -25,14 +26,29 @@ app.mount("/static", StaticFiles(directory=os.path.join(Path(__file__).parent,
 # Load teacher credentials from JSON file
 def load_teachers():
     teachers_file = os.path.join(current_dir, "teachers.json")
-    with open(teachers_file, 'r') as f:
-        data = json.load(f)
-        return data['teachers']
+    try:
+        with open(teachers_file, 'r') as f:
+            data = json.load(f)
+            return data['teachers']
+    except FileNotFoundError:
+        print(f"Warning: {teachers_file} not found. No teachers will be able to log in.")
+        return []
+    except json.JSONDecodeError as e:
+        print(f"Error: Invalid JSON in {teachers_file}: {e}")
+        return []
 
 teachers = load_teachers()
 
 # In-memory session storage (simple token-based auth)
+# Note: Sessions will be lost on server restart. In production, use Redis or database.
+SESSION_TIMEOUT = 8 * 3600  # 8 hours in seconds
 active_sessions = {}
+
+
+# Pydantic models for request bodies
+class LoginRequest(BaseModel):
+    username: str
+    password: str
 
 # In-memory activity database
 activities = {
@@ -99,24 +115,24 @@ def root():
 
 
 @app.post("/auth/login")
-def login(username: str, password: str, response: Response):
+def login(credentials: LoginRequest, response: Response):
     """Login endpoint for teachers"""
     # Verify credentials
     for teacher in teachers:
-        if teacher['username'] == username and teacher['password'] == password:
+        if teacher['username'] == credentials.username and teacher['password'] == credentials.password:
             # Generate session token
             session_token = secrets.token_urlsafe(32)
-            active_sessions[session_token] = username
+            active_sessions[session_token] = credentials.username
             
             # Set cookie
             response.set_cookie(
                 key="session_token",
                 value=session_token,
                 httponly=True,
-                max_age=3600 * 8,  # 8 hours
+                max_age=SESSION_TIMEOUT,
                 samesite="lax"
             )
-            return {"message": "Login successful", "username": username}
+            return {"message": "Login successful", "username": credentials.username}
     
     raise HTTPException(status_code=401, detail="Invalid credentials")
 
