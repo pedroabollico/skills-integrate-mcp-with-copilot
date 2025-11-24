@@ -48,3 +48,41 @@ The application uses a simple data model with meaningful identifiers:
    - Grade level
 
 All data is stored in memory, which means data will be reset when the server restarts.
+
+## Managing Activities
+
+Activities are stored in the `activities.json` file, which can be safely edited by teachers without modifying any Python code. This makes it easy to add, remove, or update activities.
+
+### Editing Activities
+
+To modify activities, simply edit the `activities.json` file. Each activity has the following structure:
+
+```json
+{
+  "Activity Name": {
+    "description": "Description of the activity",
+    "schedule": "When the activity meets",
+    "max_participants": 20,
+    "participants": ["email1@mergington.edu", "email2@mergington.edu"]
+  }
+}
+```
+
+### Example: Adding a New Activity
+
+To add a new activity, add a new entry to the JSON file:
+
+```json
+{
+  "Science Club": {
+    "description": "Conduct experiments and explore scientific concepts",
+    "schedule": "Wednesdays, 3:00 PM - 4:30 PM",
+    "max_participants": 15,
+    "participants": []
+  }
+}
+```
+
+After editing the file, restart the server for changes to take effect.
+
+**Note:** Make sure the JSON file is valid. You can use online JSON validators if you're unsure about the syntax.
