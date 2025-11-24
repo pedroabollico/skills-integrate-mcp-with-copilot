@@ -42,6 +42,7 @@ teachers = load_teachers()
 # In-memory session storage (simple token-based auth)
 # Note: Sessions will be lost on server restart. In production, use Redis or database.
 SESSION_TIMEOUT = 8 * 3600  # 8 hours in seconds
+SECURE_COOKIES = os.environ.get("SECURE_COOKIES", "false").lower() == "true"
 active_sessions = {}
 
 
@@ -130,7 +131,8 @@ def login(credentials: LoginRequest, response: Response):
                 value=session_token,
                 httponly=True,
                 max_age=SESSION_TIMEOUT,
-                samesite="lax"
+                samesite="lax",
+                secure=SECURE_COOKIES  # Only send over HTTPS in production
             )
             return {"message": "Login successful", "username": credentials.username}
     
