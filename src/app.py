@@ -22,8 +22,13 @@ app.mount("/static", StaticFiles(directory=os.path.join(Path(__file__).parent,
 
 # Load activities from JSON file
 activities_file = os.path.join(current_dir, "activities.json")
-with open(activities_file, "r") as f:
-    activities = json.load(f)
+try:
+    with open(activities_file, "r", encoding="utf-8") as f:
+        activities = json.load(f)
+except FileNotFoundError:
+    raise RuntimeError(f"Activities file not found at {activities_file}")
+except json.JSONDecodeError as e:
+    raise RuntimeError(f"Invalid JSON in activities file: {e}")
 
 
 @app.get("/")
